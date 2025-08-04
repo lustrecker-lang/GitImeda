@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Unna:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        @media print {
+            body {
+                margin: 0; /* Reset default body margin for printing */
+                font-family: 'Inter', sans-serif; /* Body font */
+                color: rgb(33, 37, 41); /* Body font color (dark) */
+                background-color: #F6F1EB; /* Global background color */
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .page-content {
+                height: 100vh; /* Ensure content takes full page height */
+                display: flex;
+                flex-direction: column;
+                /* justify-content: center; */ /* Adjusted for new page 1 layout */
+                /* align-items: center; */ /* Adjusted for new page 1 layout */
+                box-sizing: border-box; /* Include padding and border in element's total width and height */
+                position: relative; 
+                overflow: hidden; 
+                padding: 25px; /* Added universal page padding */
+            }
+            /* Page 1 Specific Styles */
+            .page-one-top-half {
+                height: 50vh;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+            .page-one-top-half img.bg-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .page-one-bottom-half {
+                height: 50vh;
+                width: 100%;
+                background-color: #F6F1EB; /* Changed from white to global background */
+                padding: 0px; /* Removed padding, now handled by .page-content */
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center content horizontally */
+                justify-content: center; /* Center content vertically */
+                text-align: center; /* Center text within elements */
+            }
+            .page-one-bottom-half .logo {
+                max-height: 50px; /* Adjust as needed - was 60px */
+                margin-bottom: 15px;
+            }
+            .page-one-bottom-half .title {
+                font-size: 2em; /* Adjust as needed - was 1.5em */
+                margin-bottom: 5px;
+                font-family: 'Unna', serif; /* Title font */
+                color: #051E3A; /* Title font color */
+                font-weight: 100; /* Added font weight */
+            }
+            .page-one-bottom-half .subtitle {
+                font-size: 1em; /* Adjust as needed */
+                color: rgb(102, 102, 102); /* Body font color (light) - was #555 */
+                font-family: 'Inter', sans-serif; /* Body font for subtitle */
+            }
+
+            .small-additional-subtitle {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.85em;
+                color: rgb(102, 102, 102);
+                line-height: 1.4;
+                margin-top: 10px;
+                /* text-align: center; /* Inherited from .page-one-bottom-half */
+            }
+
+            /* END Page 1 Specific Styles */
+
+            /* Page 2 Specific Styles */
+            .page-two-content { /* Specific container for page 2 content if needed */
+                width: 100%;
+                padding: 0px; /* Removed padding, now handled by .page-content */
+                box-sizing: border-box;
+            }
+
+            .page-two-content h1, .page-two-content h2 {
+                text-align: left; /* Align headings to the left */
+                width: 100%; /* Ensure they take full width */
+                /* Font styles are inherited or applied globally */
+            }
+            .page-two-content h2 { /* More specific for spacing */
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+            
+            .card-container { /* Will now act as the visual card for Notre Mission */
+                display: grid; 
+                grid-template-columns: 1fr 1fr; 
+                margin-top: 20px; 
+                margin-bottom: 20px; 
+                width: 100%; /* Changed from 95% to fill padded .page-content area */
+                /* max-width: 800px; /* Removed to allow full width within padding */
+                border-radius: 2px; 
+                /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Removed shadow */
+                overflow: hidden; 
+                /* margin-left: auto; /* Removed for 100% width */
+                /* margin-right: auto; /* Removed for 100% width */
+            }
+
+            /* Removing old .card, .card-image-pane as the structure changes for Notre Mission */
+            /* .card { ... } */
+            /* .card img { ... } */
+            /* .card-image-pane { ... } */
+            /* .card-image-pane img { ... } */
+            /* .card-content { ... } - styles to be reapplied to mission-text-column or its children */
+
+            .mission-text-column {
+                /* width: 50%; /* Handled by grid-template-columns */
+                padding: 25px; 
+                background-color: #FFFFFF; 
+                box-sizing: border-box;
+            }
+
+            .mission-image-column {
+                /* width: 50%; /* Handled by grid-template-columns */
+                background-image: url('../../images/pdf/about.jpg');
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                /* align-self: stretch; /* Flex property, grid items stretch by default */
+                box-sizing: border-box; /* Added for consistency */
+            }
+
+            /* Re-applying/adapting title and description styles */
+            .mission-text-column .card-title { /* Scoping to this section */
+                font-family: 'Unna', serif;
+                color: #051E3A;
+                font-size: 1.5em;
+                margin-top: 0;
+                margin-bottom: 15px; /* Adjusted margin */
+                font-weight: 100; /* Added font weight */
+            }
+
+            .mission-text-column .card-description {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.9em;
+                line-height: 1.6;
+                color: rgb(33, 37, 41);
+                margin-bottom: 10px; /* Space between paragraphs */
+            }
+            .mission-text-column .card-description:last-child {
+                margin-bottom: 0;
+            }
+
+            /* Styles for "Pourquoi choisir IMEDA?" new two-card layout */
+            .two-cards-row {
+                display: flex;
+                gap: 0; /* Removed gap to merge cards */
+                margin-top: 20px; 
+                width: 100%; 
+                border: 1px solid #E0E0E0; /* Added border to the row */
+                border-radius: 2px; /* Added border-radius to the row */
+                overflow: hidden; /* To contain children's corners */
+            }
+
+            .explainer-card {
+                flex: 1; 
+                background-color: #FFFFFF;
+                padding: 20px;
+                /* border: 1px solid #E0E0E0; /* Removed individual border */
+                /* border-radius: 6px; /* Removed individual radius */
+                box-sizing: border-box;
+            }
+
+            .explainer-card:first-child {
+                border-right: 1px solid #E0E0E0; /* Dividing line */
+            }
+
+            .explainer-item {
+                margin-bottom: 20px; /* Space between items within a card */
+            }
+
+            .explainer-item:last-child {
+                margin-bottom: 0; /* No bottom margin for the last item in a card */
+            }
+
+            .explainer-title {
+                font-family: 'Unna', serif;
+                color: #051E3A;
+                font-size: 1.2em;
+                margin-top: 0;
+                margin-bottom: 8px;
+                font-weight: 100; /* Added font weight */
+            }
+
+            .explainer-subtitle {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.9em;
+                color: rgb(102, 102, 102);
+                line-height: 1.5;
+            }
+            /* END Page 2 Specific Styles */
+
+            .page-content.full-screen-image { /* This class might be repurposed or removed if only page 1 had it */
+                padding: 0; 
+            }
+
+            .page-content img.bg-image { /* General bg image, now more specific to page 1 top */
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Cover the area, might crop */
+                z-index: -1; /* Place image behind other content */
+            }
+            .page-content .centered-title {
+                color: white; /* Example color, adjust as needed - Keeping this for titles directly on images */
+                font-size: 3em; /* Example size, adjust as needed */
+                text-align: center;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Example shadow for readability */
+                position: relative; /* Ensure it's above the z-index -1 image */
+                z-index: 1;
+            }
+
+            .page-content img:not(.bg-image) {
+                max-width: 90%;
+                max-height: 90vh;
+                object-fit: contain;
+            }
+            .page-content table {
+                width: 80%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            .page-content th, .page-content td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+                font-family: 'Inter', sans-serif; /* Body font for table text */
+            }
+        }
+        /* Optional: Styles for screen view to better visualize */
+        body { /* Apply to screen view as well */
+            font-family: 'Inter', sans-serif;
+            color: rgb(33, 37, 41); /* Body font color (dark) */
+            background-color: #F6F1EB; /* Global background color */
+        }
+        h1, h2, h3, h4, h5, h6, .page-one-bottom-half .title { /* Apply to screen view as well */
+            font-family: 'Unna', serif;
+            color: #051E3A; /* Title font color */
+            font-weight: 100; /* Added font weight */
+        }
+        .page-content {
+            border: 1px dashed #ccc; /* Visual aid for page boundaries on screen */
+            margin-bottom: 10px; /* Spacing between pages on screen */
+        }
+        /* Page 3 Specific Styles */
+        .page-three-content {
+            width: 100%;
+            /* Padding is handled by .page-content a P-level higher */
+            display: flex; /* Added to allow h1 to be separate from grid */
+            flex-direction: column; /* Stack h1 and grid */
+        }
+
+        .page-three-content h1 {
+            /* Handled by global h1 styles for font and color */
+            margin-bottom: 20px; /* Space after the main title */
+        }
+
+        .cards-grid-page-three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+            gap: 20px;
+            /* margin-top: 20px; /* Replaced by h1 margin-bottom */
+        }
+
+        .info-card-p3 {
+            background-color: #FFFFFF; /* Card background */
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .card-image-top-pane-p3 {
+            width: 100%;
+            height: 160px; /* Or desired height */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+        
+        .info-card-p3-content { /* Wrapper for title and description */
+            padding: 15px;
+            flex-grow: 1; 
+        }
+
+        .card-title-p3 {
+            font-family: 'Unna', serif;
+            font-weight: 100;
+            color: #051E3A;
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .card-description-p3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8em;
+            line-height: 1.5;
+            color: rgb(33, 37, 41);
+        }
+        /* END Page 3 Specific Styles */
+
+        /* Page 4 Specific Styles */
+        .page-four-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* text-align: center; */ /* Removed to allow h1 to be left-aligned by default or by its own rule */
+        }
+        .page-four-content h1 {
+             margin-bottom: 20px;
+             text-align: left; /* Ensure this h1 is left-aligned */
+        }
+
+        .page-four-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px; /* Space between title and table */
+        }
+
+        .page-four-content th, .page-four-content td {
+            border: 1px solid #E0E0E0; /* Light border for cells */
+            padding: 10px;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+        }
+
+        .page-four-content th {
+            font-family: 'Unna', serif;
+            font-weight: 700; /* Unna bold for headers, as 100 might be too light */
+            background-color: #FFFFFF; /* White background for headers */
+            color: #051E3A;
+            font-size: 1em;
+        }
+        /* END Page 4 Specific Styles */
+
+        /* START Course Detail Page Specific Styles (Pages 5 onwards) */
+        .course-detail-page-content {
+            width: 100%;
+            text-align: left; /* Default text align to left */
+        }
+        .course-detail-page-content h1 {
+            /* Font already defined by global h1, Unna, #051E3A, 100 weight */
+            /* Let'''s ensure it follows the standard global page title style for H1 */
+            font-family: 'Unna', serif;
+            color: #051E3A;
+            font-weight: 100;
+            font-size: 2em; /* Or your standard H1 size */
+            margin-bottom: 25px; /* Space after title */
+            text-align: left; /* Changed from center to left */
+        }
+        .course-detail-field {
+            margin-bottom: 15px; /* Space between field entries */
+        }
+        .course-detail-field .field-label {
+            font-family: 'Unna', serif; /* Using Unna for labels */
+            font-weight: 100; /* Changed from 700 to 100 */
+            color: #051E3A; 
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 5px; /* Space between label and its value */
+        }
+        .course-detail-field .field-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            color: rgb(33, 37, 41); /* Standard body text color */
+            margin-top: 0;
+            margin-bottom: 0;
+            white-space: pre-line; /* Preserve newlines from CSV data if any */
+        }
+        /* END Course Detail Page Specific Styles */
+
+        /* START Category Info Page (Public Ciblé / Nos Formateurs) Specific Styles */
+        .category-info-content h2 { /* Changed from .page-five-content */
+            /* Inherits Unna, 100 weight, #051E3A from global h2 */
+            margin-top: 30px; 
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .category-info-content .card-container:first-of-type + h2 { /* Changed from .page-five-content */
+            margin-top: 40px; /* More space between the two sections */
+        }
+        /* END Category Info Page Specific Styles */
+
+        /* START Final Contact Page Specific Styles */
+        .final-contact-page {
+            background-color: #051E3A;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .final-contact-page .logo-white {
+            max-width: 150px; /* Adjust as needed - was 200px */
+            margin-bottom: 30px;
+        }
+        .final-contact-page h2 {
+            font-family: 'Unna', serif;
+            font-weight: 100; /* Standard Unna weight */
+            color: #FFFFFF !important; /* Ensure white override if global h2 has other color */
+            font-size: 2em; /* Or your standard H2 size */
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .final-contact-page p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1em; /* Adjust as needed */
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #FFFFFF !important; /* Ensure white override */
+            max-width: 600px; /* Constrain width for readability */
+        }
+        .final-contact-page .contact-intro {
+            margin-bottom: 25px;
+        }
+        .final-contact-page .contact-detail {
+            font-size: 0.9em; /* Slightly smaller for details */
+            margin-bottom: 8px;
+        }
+        /* END Final Contact Page Specific Styles */
+
+    </style>
+</head>
+<body>
+    <div class="page-content page-break"> <!-- Page 1 container -->
+        <div class="page-one-top-half">
+            <img src="../../images/PDF/cover.jpg" alt="Cover Image" class="bg-image">
+        </div>
+        <div class="page-one-bottom-half">
+            <img src="../../images/logo.png" alt="E-Meda Logo" class="logo">
+            <h2 class="title">{{Category Name}}</h2>
+            <p class="subtitle">{{Course Quantity}} Formations</p>
+            <p class="small-additional-subtitle">Découvrez nos formules complètes :<br>14 jours de formation incluant l'hébergement en hôtel,<br>les services d'un chauffeur, la restauration,<br>le programme pédagogique, la certification<br>et des opportunités de réseautage uniques.</p>
+        </div>
+    </div>
+    <div class="page-content page-break">
+        <div class="page-two-content">
+            <div class="card-container">
+                <div class="mission-text-column">
+                    <h3 class="card-title">Notre Mission</h3>
+                    <p class="card-description">Depuis 2024, IMEDA s'engage à offrir des programmes de formation professionnelle de haut niveau, spécifiquement conçus pour les cadres et dirigeants du continent africain. Notre mission est de doter les talents africains des compétences managériales, économiques et techniques nécessaires pour relever les défis contemporains et saisir les opportunités de croissance. Nous combinons rigueur académique internationale et une compréhension profonde des contextes locaux pour un impact tangible et durable.</p>
+                    <p class="card-description">Avec plus de 500 professionnels formés issus de plus de 15 pays d'Afrique francophone, IMEDA est fier de contribuer activement au développement des compétences et au renforcement des capacités institutionnelles sur le continent.</p>
+                </div>
+                <div class="mission-image-column">
+                    <!-- Image is now a background for this div -->
+                </div>
+            </div>
+
+            <h2>Pourquoi choisir IMEDA?</h2>
+            <div class="two-cards-row">
+                <div class="explainer-card"> <!-- Left Card -->
+                    <div class="explainer-item">
+                        <h4 class="explainer-title">Excellence Académique et Pédagogique</h4>
+                        <p class="explainer-subtitle">Profitez d'un enseignement de pointe dispensé par des experts et praticiens reconnus, avec des programmes constamment actualisés.</p>
+                    </div>
+                    <div class="explainer-item">
+                        <h4 class="explainer-title">Réseau International d'Influence</h4>
+                        <p class="explainer-subtitle">Rejoignez une communauté dynamique d'anciens élèves et de partenaires, ouvrant des opportunités uniques de collaboration.</p>
+                    </div>
+                </div>
+                <div class="explainer-card"> <!-- Right Card -->
+                    <div class="explainer-item">
+                        <h4 class="explainer-title">Approche Adaptée aux Réalités Africaines</h4>
+                        <p class="explainer-subtitle">Nos formations intègrent une compréhension fine des enjeux spécifiques du continent, pour des compétences directement applicables.</p>
+                    </div>
+                    <div class="explainer-item">
+                        <h4 class="explainer-title">Accompagnement et Cadre d'Exception</h4>
+                        <p class="explainer-subtitle">Bénéficiez d'un suivi personnalisé et de conditions d'apprentissage optimales dans nos campus internationaux.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content page-break">
+        <div class="page-three-content">
+            <h1>Ce qui est inclus</h1>
+            <div class="cards-grid-page-three">
+                <!-- Card 1 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk1.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Hébergement de Standing</h4>
+                        <p class="card-description-p3">Profitez d'un séjour dans des hôtels haut de gamme, sélectionnés pour leur confort et leur service d'excellence.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk2.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Transport Privé</h4>
+                        <p class="card-description-p3">Un service de chauffeur dédié assure vos déplacements entre votre hébergement et les lieux de formation, pour une tranquillité d'esprit totale.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk3.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Réseautage d'Élite</h4>
+                        <p class="card-description-p3">Accédez à un réseau professionnel influent et participez à des événements exclusifs pour étendre vos connexions.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk4.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Repas de Qualité Inclus</h4>
+                        <p class="card-description-p3">Profitez chaque jour de petits-déjeuners et déjeuners de haute qualité, soigneusement préparés pour accompagner vos journées de formation.</p>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk5.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Espaces de Formation Modernes</h4>
+                        <p class="card-description-p3">Apprenez dans des lieux inspirants et parfaitement équipés, conçus pour favoriser la concentration, l'interaction et le bien-être.</p>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="info-card-p3">
+                    <div class="card-image-top-pane-p3" style="background-image: url('../../images/pdf/perk6.jpg');"></div>
+                    <div class="info-card-p3-content">
+                        <h4 class="card-title-p3">Sortie Touristique Enrichissante</h4>
+                        <p class="card-description-p3">Découvrez les environs et profitez d'une sortie touristique organisée, une occasion de détente et de découverte culturelle.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ###COURSE_SUMMARY_PAGES_INSERT_POINT### -->
+
+    <!-- ###COURSE_DETAIL_PAGES_INSERT_POINT### -->
+
+    <div class="page-content page-break"> <!-- Page for Public Ciblé & Nos Formateurs (Now after course details placeholder) -->
+        <div class="category-info-content"> <!-- Changed class name from page-five-content -->
+            <h2>Public Ciblé</h2>
+            <div class="card-container">
+                <div class="mission-text-column">
+                    <p class="card-description">{{Public_Cible_Text}}</p>
+                </div>
+                <div class="mission-image-column" style="background-image: url('../../images/pdf/cible.jpg');">
+                    <!-- Image via CSS background -->
+                </div>
+            </div>
+
+            <h2>Nos Formateurs</h2>
+            <div class="card-container">
+                <div class="mission-text-column">
+                    <p class="card-description">{{Nos_Formateurs_Text}}</p>
+                </div>
+                <div class="mission-image-column" style="background-image: url('../../images/pdf/formateurs.jpg');">
+                    <!-- Image via CSS background -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content page-break final-contact-page">
+        <img src="../../images/logowhite.png" alt="IMEDA Logo White" class="logo-white">
+        <h2>Nos Coordonnées</h2>
+        <p class="contact-intro">
+            N'hésitez pas à nous contacter directement via les informations ci-dessous. Nous nous efforçons de répondre à toutes les demandes dans les plus brefs délais.
+        </p>
+        <p class="contact-detail"><strong>Adresse :</strong> Rue du Bac, 75008 Paris, France | Aurora Building, Dubai, UAE</p>
+        <p class="contact-detail"><strong>Téléphone (France) :</strong> +33 6 51 65 31 44</p>
+        <p class="contact-detail"><strong>Téléphone (Dubaï) :</strong> +971 55406 8980</p>
+        <p class="contact-detail"><strong>Email :</strong> info@imeda.fr</p>
+    </div>
+
+</body>
+</html> 
